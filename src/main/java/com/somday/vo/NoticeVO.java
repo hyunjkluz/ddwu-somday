@@ -3,6 +3,7 @@
  */
 package com.somday.vo;
 
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -21,7 +22,7 @@ public class NoticeVO {
 	private NoticeCategoryVO category;
 	private MajorVO major;
 	private String title;
-	private String image;
+	private NoticeVO[] images;
 	private String content;
 	private Date registeredAt;
 	private Date updatedAt;
@@ -34,18 +35,19 @@ public class NoticeVO {
 	 * @param category
 	 * @param major
 	 * @param title
+	 * @param images
 	 * @param content
 	 * @param registeredAt
 	 * @param updatedAt
 	 */
-	public NoticeVO(Integer id, NoticeCategoryVO category, MajorVO major, String title, String image, String content,
-			Date registeredAt, Date updatedAt) {
+	public NoticeVO(Integer id, NoticeCategoryVO category, MajorVO major, String title, NoticeVO[] images,
+			String content, Date registeredAt, Date updatedAt) {
 		super();
 		this.id = id;
 		this.category = category;
 		this.major = major;
 		this.title = title;
-		this.image = image;
+		this.images = images;
 		this.content = content;
 		this.registeredAt = registeredAt;
 		this.updatedAt = updatedAt;
@@ -67,8 +69,8 @@ public class NoticeVO {
 		return title;
 	}
 
-	public String getImage() {
-		return image;
+	public NoticeVO[] getImages() {
+		return images;
 	}
 
 	public String getContent() {
@@ -85,8 +87,9 @@ public class NoticeVO {
 
 	@Override
 	public String toString() {
-		return "NoticeVO [id=" + id + ", category=" + category + ", major=" + major + ", title=" + title + ", content="
-				+ content + ", registeredAt=" + registeredAt + ", updatedAt=" + updatedAt + "]";
+		return "NoticeVO [id=" + id + ", category=" + category + ", major=" + major + ", title=" + title + ", images="
+				+ Arrays.toString(images) + ", content=" + content + ", registeredAt=" + registeredAt + ", updatedAt="
+				+ updatedAt + "]";
 	}
 
 }

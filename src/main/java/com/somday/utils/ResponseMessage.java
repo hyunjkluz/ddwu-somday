@@ -17,6 +17,7 @@ package com.somday.utils;
 public class ResponseMessage {
 	public static final String NO_CONTENT = "데이터 없음";
     public static final String NULL_VALUE = "필요한 값 없음";
+    public static final String INCORRECT_VALUE = "값이 유효한 범위 안에 없음";
     
 	public static final String INVALID_TOKEN = "토큰값이 유효하지 않습니다.";
 	public static final String EMPTY_TOKEN = "토큰값이 존재하지 않습니다.";

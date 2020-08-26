@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- Annotation 처리에 필요한 모든 BeanPostProcessor bean들을 자동으로 등록하기위한 설정 적용 -->
+	<context:annotation-config/>
+
+	<!-- @Controller 클래스"의 객체를 Spring bean으로 자동 등록시키기 위한 (Annotaion 기반의 설정) 설정 적용 -->
+	<context:component-scan base-package="com.somday.controller" />
+	
+	
+	<!-- Annotation 기반 controller 및 handler mapping 이용을 위한 설정 적용 -->
+	<mvc:annotation-driven />
+
+	<!-- Controller에 mapping되지 못한 요청은 모 두 WAS의 default servlet으로 전달하여 처리 -->
+	<mvc:default-servlet-handler />
+	
+	<!-- Controller bean 정의없이 이용 -->
+	<mvc:view-controller path="/main" view-name="main" />
+	
+	<!-- ViewResolver 설정 적용 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/view/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	<!-- multipartResolver 설정 적용 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
+	</bean>
+
+	
+	<!-- 비어플리케이션 자원 분리 -->
+	<mvc:resources mapping="/resources/**" location="/resources/"/>
+
+
+	<bean id="swagger2Config"
+			class="springfox.documentation.swagger2.configuration.Swagger2DocumentationConfiguration"></bean>
+	
+	<mvc:resources location="classpath:/META-INF/resources/" mapping="swagger-ui.html"></mvc:resources>
+	<mvc:resources location="classpath:/META-INF/resources/webjars/" mapping="/webjars/**"></mvc:resources>
+
+
+	<!-- 특정 URL pattern에 대한 interceptor 설정 -->
+	<mvc:interceptors> 
+		<mvc:interceptor>
+			<mvc:mapping path="/apis/memo/**"/>
+			<mvc:mapping path="/apis/reservation/**"/>
+			<mvc:mapping path="/apis/notice/**"/>
+			<mvc:mapping path="/apis/student/update"/>
+			<bean class="com.somday.controller.AuthInterceptor" />
+		</mvc:interceptor> 
+	</mvc:interceptors>
+</beans>

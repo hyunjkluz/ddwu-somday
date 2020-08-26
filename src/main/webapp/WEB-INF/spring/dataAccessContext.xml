@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<context:property-placeholder
+		location="classpath*:config/application.properties" />
+
+	<!-- data source 설정 -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<property name="url" value="${aws.rds.mysql.url}" />
+		<property name="username" value="${aws.rds.mysql.username}" />
+		<property name="password" value="${aws.rds.mysql.password}" />
+
+		<!-- <property name="maxActive" value="20" /> 
+		<property name="maxWait" value="6000" /> 
+		<property name="poolPreparedStatements" value="true" /> 
+		<property name="defaultAutoCommit" value="true" /> 
+		<property name="initialSize" value="10" /> 
+		<property name="maxIdle" value="20" /> 
+		<property name="validationQuery" value="select 1" /> 
+		<property name="testWhileIdle" value="true" /> 
+		<property name="timeBetweenEvictionRunsMillis" value="7200000" /> -->
+	</bean>
+
+	<!-- MyBatis SqlSessionFactoryBean 생성 -->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="typeAliasesPackage" value="com.somday.vo com.somday.req.vo" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:/mybatis-config.xml" />
+		<property name="mapperLocations">
+			<array>
+				<value>classpath*:/com/somday/repository/mapper/**/*.xml</value>
+			</array>
+		</property>
+	</bean>
+
+	<!-- MyBatis SqlSessionTemplate bean 생성 -->
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactoryBean" />
+	</bean>
+
+	<!-- MyBatis MapperScannerConfigurer 설정: Mapper interface scan 및 mapper bean 자동 생성 -->
+	<mybatis:scan base-package="com.somday.repository.mapper" />
+
+	<!-- 트랜잭션 관리자 설정 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- Annotation 을 사용한 트랜잭션 사용시 활성화 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- @Repository 애노테이션을 붙혀진 클래스를 빈으로 등록 -->
+	<context:component-scan base-package="com.somday.repository" />
+
+</beans>

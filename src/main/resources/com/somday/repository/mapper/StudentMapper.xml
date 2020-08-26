@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.somday.repository.mapper.StudentMapper">
+	<select id="selectStudentIdByStudentId" parameterType="String" resultType="String">
+		SELECT studentId
+		FROM somday.Student
+		WHERE studentId = #{encryptedStudentId}
+	</select>
+	
+	<select id="selectIdByStudentId" parameterType="String" resultType="String">
+		SELECT id
+		FROM somday.Student
+		WHERE studentId = #{encryptedStudentId}
+	</select>
+
+	<select id="selectStudentByStudentId" parameterType="String" resultType="StudentInfoVO">
+		SELECT s.id AS id, s.name AS name, s.password AS password, s.studentId AS studentId, s.step AS step, s.type AS type, s.registeredAt AS registeredAt, m.id AS "major.id", m.name AS "major.name"
+		FROM somday.Student as s
+		JOIN somday.Major as m
+		ON s.studentId=#{studentId} AND s.major = m.id
+	</select>
+	
+	<insert id="insertStudent" parameterType="StudentInfoReq">
+		INSERT INTO Student (id, name, password, studentId, major, phone) 
+		VALUES (#{id}, #{name}, #{encryptedPw}, #{encryptedStudentId}, #{majorId}, #{encryptedPhone})
+	</insert>
+	
+	<update id="updatePasswordById">
+		UPDATE somday.Student
+		SET password=#{newPw}, updatedAt=CURRENT_TIMESTAMP
+		WHERE id=#{id}
+	</update>
+	
+	<update id="updateStudentInfo" parameterType="StudentInfoUpdateReq">
+		UPDATE somday.Student
+		SET name=#{name}, major=#{majorId}, password=#{encryptedPw}, phone=#{encryptedPhone}, updatedAt=CURRENT_TIMESTAMP
+		WHERE id=#{id}
+	</update>
+</mapper>

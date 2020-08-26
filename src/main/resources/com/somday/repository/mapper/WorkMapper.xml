@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.somday.repository.mapper.WorkMapper">
+	<select id="selectReservationByStudentId" resultType="WorkVO">
+		SELECT wr.id AS "id", wr.studentId AS "studentId", r.id AS "room.id", r.name AS "room.name"
+		FROM somday.WorkReservation AS wr
+		JOIN somday.Room AS r
+		ON wr.studentId=#{studentId} AND DATE(registeredAt)=current_date() AND wr.roomId=r.id
+	</select>
+	
+	<insert id="insertTodayReservation">
+		INSERT INTO somday.WorkReservation (studentId, roomId)
+		VALUES (#{studentId}, #{roomId})
+	</insert>
+	
+	<delete id="deleteTodayReservation">
+		DELETE FROM somday.WorkReservation
+		WHERE id=#{id}
+	</delete>
+	
+	<select id="selectRoomOfMajor" resultType="RoomVO">
+		SELECT id, name, majorId
+		FROM somday.Room
+		WHERE majorId=#{majorId}
+	</select>
+	
+	<delete id="deleteYesterdayData">
+		DELETE FROM somday.workReservation
+		WHERE DATE(registeredAt)=#{yesterday}
+	</delete>
+</mapper>

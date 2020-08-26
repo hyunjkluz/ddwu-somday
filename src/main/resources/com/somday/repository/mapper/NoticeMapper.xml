@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.somday.repository.mapper.NoticeMapper">
+	<select id="selectNoticeByCategory" resultType="NoticeVO">
+		SELECT n.id "id", n.title "title", LEFT(n.content, 15) "content", n.registeredAt "registeredAt", n.updatedAt "updatedAt",
+		nc.id "category.id", nc.name "category.name", m.id "major.id", m.name "major.name"
+		FROM somday.Notice AS n
+		JOIN somday.NoticeCategory AS nc
+		ON n.categoryId=#{categoryId} AND n.categoryId=nc.id
+		LEFT JOIN somday.Major AS m
+		ON n.majorId=m.id
+		ORDER BY n.registeredAt DESC
+	</select>
+	
+	<select id="selectAllNotice" resultType="NoticeVO">
+		SELECT n.id "id", n.title "title", LEFT(n.content, 15) "content", n.registeredAt "registeredAt", n.updatedAt "updatedAt",
+		nc.id "category.id", nc.name "category.name", m.id "major.id", m.name "major.name"
+		FROM somday.Notice AS n
+		JOIN somday.NoticeCategory AS nc
+		ON n.categoryId=nc.id AND (n.categoryId="CT02" OR n.categoryId="CT03" OR n.categoryId=#{majorNoticeCategory})
+		LEFT JOIN somday.Major AS m
+		ON n.majorId=m.id 
+		ORDER BY n.registeredAt DESC
+	</select>
+	
+	<select id="selectNoticeByCategoryAndTitle" resultType="NoticeVO">
+		SELECT n.id "id", n.title "title", LEFT(n.content, 15) "content", n.registeredAt "registeredAt", n.updatedAt "updatedAt",
+		nc.id "category.id", nc.name "category.name", m.id "major.id", m.name "major.name"
+		FROM somday.Notice AS n
+		JOIN somday.NoticeCategory AS nc
+		ON n.categoryId=#{categoryId} AND n.categoryId=nc.id AND AND n.title LIKE "%#{searchWord, jdbcType=VARCHAR}%"
+		LEFT JOIN somday.Major AS m
+		ON n.majorId=m.id
+		ORDER BY n.registeredAt DESC
+	</select>
+	
+	<select id="selectAllNoticeByTitle" resultType="NoticeVO">
+		SELECT n.id "id", n.title "title", LEFT(n.content, 15) "content", n.registeredAt "registeredAt", n.updatedAt "updatedAt",
+		nc.id "category.id", nc.name "category.name", m.id "major.id", m.name "major.name"
+		FROM somday.Notice AS n
+		JOIN somday.NoticeCategory AS nc
+		ON n.categoryId=nc.id AND (n.categoryId="CT02" OR n.categoryId="CT03" OR n.categoryId=#{majorNoticeCategory}) AND n.title LIKE "%#{searchWord, jdbcType=VARCHAR}%"
+		LEFT JOIN somday.Major AS m
+		ON n.majorId=m.id 
+		ORDER BY n.registeredAt DESC
+	</select>
+	
+	<select id="selectNoticeById" resultType="NoticeVO">
+		SELECT n.id "id", n.title "title", n.content "content", n.registeredAt "registeredAt", n.updatedAt "updatedAt", ni.image "image",
+		nc.id "category.id", nc.name "category.name", m.id "major.id", m.name "major.name"
+		FROM somday.Notice AS n
+		JOIN somday.NoticeCategory AS nc
+		ON n.id=#{id} AND n.categoryId=nc.id
+		LEFT JOIN somday.Major AS m
+		ON n.majorId=m.id 
+		LEFT JOIN somday.NoticeImg AS ni
+		ON n.id=ni.noticeId
+		ORDER BY n.registeredAt DESC
+	</select>
+	
+	<select id="selectMajorNoticeCategory" resultType="String">
+		SELECT id
+		FROM somday.NoticeCategory
+		WHERE majorId=#{majorId}
+	</select>
+</mapper>

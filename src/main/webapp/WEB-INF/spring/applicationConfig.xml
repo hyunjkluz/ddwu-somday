@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+    
+    <!-- @Service 클래스의 객체를 Spring bean으로 자동 등록시키기 위한 (Annotaion 기반의 설정) 설정 적용 -->
+    <context:component-scan base-package="com.somday.service"/>
+    <context:component-scan base-package="com.somday.error"/>
+    
+    <!-- 스케줄러 패키지 bean 자동 등록 -->
+    <context:component-scan base-package="com.somday.scheduler"/>  
+    
+    <!-- Scheduler 설정 -->
+    <task:scheduler id="jobSchedular" pool-size="10"/>
+    <task:annotation-driven scheduler="jobSchedular"/>
+
+</beans>

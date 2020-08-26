@@ -10,7 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.somday.repository.mapper.NoticeMapper;
 import com.somday.utils.CommonUtil;
+import com.somday.utils.MajorCateUtil;
+import com.somday.vo.NoticePagingVO;
 import com.somday.vo.NoticeVO;
+import com.somday.vo.Pagination;
+import com.somday.vo.PagingVO;
 
 /**
  * @Since : Aug 25, 2020
@@ -26,6 +30,7 @@ import com.somday.vo.NoticeVO;
 @Service
 public class NoticeService {
 	public static final Logger LOGGER = LoggerFactory.getLogger(NoticeService.class);
+	public static final Integer PAGE_SIZE = 2;
 
 	@Autowired
 	private NoticeMapper noticeMapper;
@@ -33,19 +38,41 @@ public class NoticeService {
 	/*
 	 * 학과 ID를 넣으면 해당 카테고리 ID를 찾아 리스트 반환
 	 */
-	public NoticeVO[] getAllNotice(Integer majorId) {
-		String majorNoticeCategory = getMajorNoticeCategory(majorId);
-		return noticeMapper.selectAllNotice(majorNoticeCategory);
+	public NoticePagingVO getAllNotice(Integer majorId, Integer page) {
+		String majorNoticeCategory = MajorCateUtil.format(majorId);
+		
+		PagingVO paging = new PagingVO();
+		paging.setPage(page);
+		
+		Integer noticeCount = noticeMapper.countAllNotice(majorNoticeCategory);
+		paging.calcPage(noticeCount);
+		
+		Integer start = (page - 1) * PAGE_SIZE;
+		
+		NoticeVO[] noticeList = noticeMapper.selectAllNotice(majorNoticeCategory, start, PAGE_SIZE);
+		
+		return new NoticePagingVO(noticeList, paging);
 	}
 
 	/*
 	 * 카테고리별 공지 확인
 	 */
-	public NoticeVO[] getNoticeByCategory(String categoryId, Integer majorId) {
+	public NoticePagingVO getNoticeByCategory(String categoryId, Integer majorId, Integer page) {
 		if (!CommonUtil.isNotNull(majorId)) {
-			categoryId = getMajorNoticeCategory(majorId);
+			categoryId = MajorCateUtil.format(majorId);
 		}
-		return noticeMapper.selectNoticeByCategory(categoryId);
+		
+		PagingVO paging = new PagingVO();
+		paging.setPage(page);
+		
+		Integer noticeCount = noticeMapper.countCategoryAllNotice(categoryId);
+		paging.calcPage(noticeCount);
+		
+		Integer start = (page - 1) * PAGE_SIZE;
+		
+		NoticeVO[] noticeList =  noticeMapper.selectNoticeByCategory(categoryId, start, PAGE_SIZE);
+		
+		return new NoticePagingVO(noticeList, paging);
 	}
 
 	/*
@@ -59,7 +86,7 @@ public class NoticeService {
 	 * 전체 공지 제목으로 검색
 	 */
 	public NoticeVO[] searchAllNoticeBytitle(Integer majorId, String searchWord) {
-		String majorNoticeCategory = getMajorNoticeCategory(majorId);
+		String majorNoticeCategory = MajorCateUtil.format(majorId);
 		return noticeMapper.selectAllNoticeByTitle(majorNoticeCategory, searchWord);
 	}
 
@@ -78,5 +105,14 @@ public class NoticeService {
 	 */
 	public NoticeVO getNoticeDetailById(Integer noticeId) {
 		return noticeMapper.selectNoticeById(noticeId);
+	}
+
+	public NoticeVO getMajorTopNotice(Integer majorId) {
+		String majorNoticeCategory = MajorCateUtil.format(majorId);
+		
+		NoticeVO sss = noticeMapper.selectMajorTopNotice(majorNoticeCategory);
+		LOGGER.info(sss.toString());
+		LOGGER.info(sss.getRegisteredAt().toString());
+		return sss;
 	}
 }

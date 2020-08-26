@@ -3,6 +3,8 @@
  */
 package com.somday.controller;
 
+import java.util.Arrays;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -20,6 +22,7 @@ import com.somday.req.vo.TokenReq;
 import com.somday.service.NoticeService;
 import com.somday.utils.ResponseMessage;
 import com.somday.utils.StatusCode;
+import com.somday.vo.NoticePagingVO;
 import com.somday.vo.NoticeVO;
 import com.somday.vo.Response;
 
@@ -52,10 +55,11 @@ public class NoticeController {
 	 */
 	@ApiOperation("공지사항 전체 조회")
 	@GetMapping("")
-	public ResponseEntity getAllNotice(HttpServletRequest request) {
+	public ResponseEntity<?> getAllNotice(HttpServletRequest request, 
+			@RequestParam(required = false, defaultValue = "1") Integer page) {
 		TokenReq tokenInfo = (TokenReq) request.getAttribute("tokenBody");
 		
-		NoticeVO[] noticeList = noticeService.getAllNotice(tokenInfo.getMajorId());
+		NoticePagingVO noticeList = noticeService.getAllNotice(tokenInfo.getMajorId(), page);
 		
 		return new ResponseEntity<>(Response.res(StatusCode.OK, ResponseMessage.DB_SELECT_SUCCESS, noticeList), HttpStatus.OK);
 	}
@@ -67,15 +71,24 @@ public class NoticeController {
 	 */
 	@ApiOperation(value="공지사항 - 카테고리별 공지 확인", notes = "categoryId 값 = (major : 학과공지, CT02 : 취업, CT03 : 공모전)")
 	@GetMapping("/category/{categoryId}")
-	public ResponseEntity getNoticeByCategory(HttpServletRequest request, @PathVariable String categoryId) {
+	public ResponseEntity<?> getNoticeByCategory(HttpServletRequest request, @PathVariable String categoryId,
+			@RequestParam(required = false, defaultValue = "1") Integer page) {
+		
+		final String[] CATEGORY_ONLY = { "major", "CT02", "CT03", "CT04"};
+		boolean check = Arrays.stream(CATEGORY_ONLY).anyMatch(categoryId::equals);
+		
+		if (!check) {
+			return new ResponseEntity<>(Response.res(StatusCode.BAD_REQUEST, ResponseMessage.INCORRECT_VALUE), HttpStatus.BAD_REQUEST);
+		}
+		
 		TokenReq tokenInfo = (TokenReq) request.getAttribute("tokenBody");
 		
-		NoticeVO[] noticeList = null;
+		NoticePagingVO noticeList = null;
 		
 		if (categoryId.equals("major")) {
-			noticeList = noticeService.getNoticeByCategory(categoryId, tokenInfo.getMajorId());
+			noticeList = noticeService.getNoticeByCategory(categoryId, tokenInfo.getMajorId(), page);
 		} else {
-			noticeList = noticeService.getNoticeByCategory(categoryId, null);
+			noticeList = noticeService.getNoticeByCategory(categoryId, null, page);
 		}
 		
 		return new ResponseEntity<>(Response.res(StatusCode.OK, ResponseMessage.DB_SELECT_SUCCESS, noticeList), HttpStatus.OK);
@@ -88,7 +101,7 @@ public class NoticeController {
 	 */
 	@ApiOperation(value="공지사항 내용 상세 조회")
 	@GetMapping("/{noticeId}")
-	public ResponseEntity getNoticeDetail(@PathVariable Integer noticeId) {
+	public ResponseEntity<?> getNoticeDetail(@PathVariable Integer noticeId) {
 		NoticeVO noticeDetail = noticeService.getNoticeDetailById(noticeId);
 		return new ResponseEntity<>(Response.res(StatusCode.OK, ResponseMessage.DB_SELECT_SUCCESS, noticeDetail), HttpStatus.OK);
 	}
@@ -100,7 +113,7 @@ public class NoticeController {
 	 */
 	@ApiOperation(value="검색 - 전체 공지사항")
 	@GetMapping("/search")
-	public ResponseEntity searchNoticeBytitle(HttpServletRequest request, @RequestParam String searchWord) {
+	public ResponseEntity<?> searchNoticeBytitle(HttpServletRequest request, @RequestParam String searchWord) {
 		TokenReq tokenInfo = (TokenReq) request.getAttribute("tokenBody");
 		
 		NoticeVO[] noticeList = noticeService.searchAllNoticeBytitle(tokenInfo.getMajorId(), searchWord);
@@ -115,7 +128,7 @@ public class NoticeController {
 	 */
 	@ApiOperation(value="검색 - 카테고리별 공지사항", notes = "categoryId 값 = (major : 학과공지, CT02 : 취업, CT03 : 공모전)")
 	@GetMapping("/search/category/{categoryId}")
-	public ResponseEntity searchNoticeByCategoryAndTitle(HttpServletRequest request, @PathVariable String categoryId, @RequestParam String searchWord) {
+	public ResponseEntity<?> searchNoticeByCategoryAndTitle(HttpServletRequest request, @PathVariable String categoryId, @RequestParam String searchWord) {
 		TokenReq tokenInfo = (TokenReq) request.getAttribute("tokenBody");
 		
 		NoticeVO[] noticeList = null;
@@ -129,6 +142,15 @@ public class NoticeController {
 		return new ResponseEntity<>(Response.res(StatusCode.OK, ResponseMessage.DB_SELECT_SUCCESS, noticeList), HttpStatus.OK);
 	}
 	
+	
+	@GetMapping("/top")
+	public ResponseEntity<?> getMajorTopNotice(HttpServletRequest request) {
+		TokenReq tokenInfo = (TokenReq) request.getAttribute("tokenBody");
+		
+		NoticeVO noticeList = noticeService.getMajorTopNotice(tokenInfo.getMajorId());
+		
+		return new ResponseEntity<>(Response.res(StatusCode.OK, ResponseMessage.DB_SELECT_SUCCESS, noticeList), HttpStatus.OK);
+	}
 	
 	
 	

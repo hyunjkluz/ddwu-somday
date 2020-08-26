@@ -3,6 +3,22 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.somday.repository.mapper.NoticeMapper">
+	<select id="countAllNotice" resultType="Integer">
+		SELECT COUNT(*)
+		FROM somday.Notice AS n
+		JOIN somday.NoticeCategory AS nc
+		ON n.categoryId=nc.id AND (n.categoryId="CT02" OR n.categoryId="CT03" OR n.categoryId=#{majorNoticeCategory})
+		LEFT JOIN somday.Major AS m
+		ON n.majorId=m.id
+	</select>
+	
+	<select id="countCategoryAllNotice" resultType="Integer">
+		SELECT COUNT(*)
+		FROM somday.Notice AS n
+		JOIN somday.NoticeCategory AS nc
+		ON n.categoryId=#{categoryId} AND n.categoryId=nc.id;
+	</select>
+
 	<select id="selectNoticeByCategory" resultType="NoticeVO">
 		SELECT n.id "id", n.title "title", LEFT(n.content, 15) "content", n.registeredAt "registeredAt", n.updatedAt "updatedAt",
 		nc.id "category.id", nc.name "category.name", m.id "major.id", m.name "major.name"
@@ -12,6 +28,7 @@
 		LEFT JOIN somday.Major AS m
 		ON n.majorId=m.id
 		ORDER BY n.registeredAt DESC
+		LIMIT #{startList}, #{listSize}
 	</select>
 	
 	<select id="selectAllNotice" resultType="NoticeVO">
@@ -23,6 +40,17 @@
 		LEFT JOIN somday.Major AS m
 		ON n.majorId=m.id 
 		ORDER BY n.registeredAt DESC
+		LIMIT #{startList}, #{listSize}
+	</select>
+	
+	<select id="selectMajorTopNotice" resultType="NoticeVO">
+		SELECT n.id "id", n.title "title", LEFT(n.content, 15) "content", n.registeredAt "registeredAt", n.updatedAt "updatedAt",
+		nc.id "category.id", nc.name "category.name", m.id "major.id", m.name "major.name"
+		FROM somday.Notice AS n
+		JOIN somday.NoticeCategory AS nc
+		ON n.categoryId=#{majorNoticeCategory} AND n.categoryId=nc.id AND n.fix=true
+		LEFT JOIN somday.Major AS m
+		ON n.majorId=m.id
 	</select>
 	
 	<select id="selectNoticeByCategoryAndTitle" resultType="NoticeVO">

@@ -18,9 +18,9 @@ import com.somday.vo.NoticeVO;
  *
  */
 public interface NoticeMapper {
-	NoticeVO[] selectNoticeByCategory(@Param("categoryId")String categoryId);
+	NoticeVO[] selectNoticeByCategory(@Param("categoryId")String categoryId, @Param("startList")Integer startList, @Param("listSize")Integer listSize);
 	
-	NoticeVO[] selectAllNotice(@Param("majorNoticeCategory")String majorNoticeCategory);
+	NoticeVO[] selectAllNotice(@Param("majorNoticeCategory")String majorNoticeCategory, @Param("startList")Integer startList, @Param("listSize")Integer listSize);
 	
 	NoticeVO[] selectNoticeByCategoryAndTitle(@Param("categoryId")String categoryId, @Param("searchWord")String searchWord);
 	
@@ -29,4 +29,11 @@ public interface NoticeMapper {
 	NoticeVO selectNoticeById(@Param("id")Integer noticeId);
 	
 	String selectMajorNoticeCategory(@Param("majorId")Integer majorId);
+	
+	NoticeVO selectMajorTopNotice(@Param("majorNoticeCategory")String majorNoticeCategory);
+	
+	Integer countAllNotice(@Param("majorNoticeCategory")String majorNoticeCategory);
+	
+	Integer countCategoryAllNotice(@Param("categoryId")String categoryId);
+	
 }

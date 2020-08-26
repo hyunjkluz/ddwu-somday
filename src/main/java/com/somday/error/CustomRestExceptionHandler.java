@@ -60,10 +60,18 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 		String exceptionName = ex.getClass().getSimpleName();
 		LOGGER.info(exceptionName);
 		
-		if (exceptionName.equals("ExpiredTokenError") || exceptionName.equals("ExpiredJwtException")) {
+		if (exceptionName.equals("NoToken")) {
 			return new ResponseEntity<>(Response.res(StatusCode.UNAUTHORIZED, ex.getLocalizedMessage()), HttpStatus.UNAUTHORIZED);
+		}
+		
+		if (exceptionName.equals("ExpiredJwtException")) {
+			return new ResponseEntity<>(Response.res(StatusCode.AUTHCODE_EXPIRED, ex.getLocalizedMessage()), HttpStatus.UNAUTHORIZED);
 		} 
 
+		if (exceptionName.equals("SignatureException")) {
+			return new ResponseEntity<>(Response.res(StatusCode.AUTHCODE_NOT_MATCH, ex.getLocalizedMessage()), HttpStatus.UNAUTHORIZED);
+		}
+		
 		if (exceptionName.equals("DBError") || exceptionName.equals("BadSqlGrammarException")) {
 			return new ResponseEntity<>(Response.res(StatusCode.DB_ERROR, ex.getLocalizedMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -94,10 +102,11 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 	        errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
 	    }
 	    
-	    ApiError apiError = 
-	      new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+	    
+	    Response response = new Response(StatusCode.BAD_REQUEST, errors.toString());
+	    
 	    return handleExceptionInternal(
-	      ex, apiError, headers, apiError.getStatus(), request);
+	      ex, response, headers, HttpStatus.BAD_REQUEST, request);
 	}
 	
 	/** 
@@ -111,10 +120,11 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 		LOGGER.info("두번째 에러에 걸림");
 	    String error = ex.getParameterName() + " parameter is missing";
 	    
-	    ApiError apiError = 
-	      new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
+	    
+	    Response response = new Response(StatusCode.BAD_REQUEST, error);
+	    
 	    return new ResponseEntity<Object>(
-	      apiError, new HttpHeaders(), apiError.getStatus());
+	    		response, new HttpHeaders(), HttpStatus.BAD_REQUEST);
 	}
 	
 	/**
@@ -130,10 +140,10 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 	          violation.getPropertyPath() + ": " + violation.getMessage());
 	    }
 	 
-	    ApiError apiError = 
-	      new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
+	    Response response = new Response(StatusCode.BAD_REQUEST, errors.toString());
+	    
 	    return new ResponseEntity<Object>(
-	      apiError, new HttpHeaders(), apiError.getStatus());
+	    		response, new HttpHeaders(), HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler({ MethodArgumentTypeMismatchException.class })
@@ -142,10 +152,11 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 	    String error = 
 	      ex.getName() + " should be of type " + ex.getRequiredType().getName();
 	 
-	    ApiError apiError = 
-	      new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
+	    
+	    Response response = new Response(StatusCode.BAD_REQUEST, error);
+	    
 	    return new ResponseEntity<Object>(
-	      apiError, new HttpHeaders(), apiError.getStatus());
+	    		response, new HttpHeaders(), HttpStatus.BAD_REQUEST);
 	}
 	
 	/**
@@ -156,8 +167,9 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 	  NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
 	    String error = "No handler found for " + ex.getHttpMethod() + " " + ex.getRequestURL();
 	 
-	    ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), error);
-	    return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+	    Response response = new Response(StatusCode.NOT_FOUND, error);
+	    
+	    return new ResponseEntity<Object>(response, new HttpHeaders(), HttpStatus.NOT_FOUND);
 	}
 	
 }

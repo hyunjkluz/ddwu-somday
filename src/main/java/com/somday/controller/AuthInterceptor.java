@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndViewDefiningException;
 import org.springframework.web.util.WebUtils;
 
 import com.somday.error.ExpiredTokenError;
+import com.somday.error.NoToken;
 import com.somday.req.vo.TokenReq;
 import com.somday.service.SecurityService;
 import com.somday.utils.CommonUtil;
@@ -76,7 +77,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 			return true;
 		}
 		LOGGER.info("토큰 없음");
-		throw new ExpiredTokenError("토큰이 없습니다.");
+		throw new NoToken("토큰이 없습니다.");
 	}
 
 }

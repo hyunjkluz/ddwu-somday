@@ -26,5 +26,7 @@ public interface MemoMapper {
 	Integer updateMemoById(@Param("id") Integer memoId, @Param("content") String content);
 
 	Integer deleteMemoById(@Param("id") Integer memoId);
+	
+	Integer updateMemoChecked(@Param("id") Integer memoId, @Param("checked")boolean checked);
 
 }

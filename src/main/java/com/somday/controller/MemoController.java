@@ -64,7 +64,7 @@ public class MemoController {
 	 */
 	@ApiOperation(value="사용자의 전체 메모 조회")
 	@GetMapping("")
-	public ResponseEntity getUsersAllMemo(HttpServletRequest request) {
+	public ResponseEntity<?> getUsersAllMemo(HttpServletRequest request) {
 		try {
 			TokenReq tokenInfo = (TokenReq) request.getAttribute("tokenBody");
 
@@ -86,7 +86,7 @@ public class MemoController {
 	 */
 	@ApiOperation(value="메모 저장")
 	@PostMapping("")
-	public ResponseEntity postUserMemo(HttpServletRequest request, @RequestBody @Valid MemoReq memoReq) {
+	public ResponseEntity<?> postUserMemo(HttpServletRequest request, @RequestBody @Valid MemoReq memoReq) {
 		try {
 			TokenReq tokenInfo = (TokenReq) request.getAttribute("tokenBody");
 
@@ -108,7 +108,7 @@ public class MemoController {
 	 */
 	@ApiOperation(value="메모 내용 수정")
 	@PutMapping("/{memoId}")
-	public ResponseEntity putUserMemo(HttpServletRequest request, @RequestBody @Valid MemoReq memoReq, @PathVariable Integer memoId) {
+	public ResponseEntity<?> putUserMemo(HttpServletRequest request, @RequestBody @Valid MemoReq memoReq, @PathVariable Integer memoId) {
 		try {
 			Integer isUpdate = memoService.updateMemo(memoId, memoReq.getContent());
 
@@ -128,7 +128,7 @@ public class MemoController {
 	 */
 	@ApiOperation(value="메모 삭제")
 	@DeleteMapping("/{memoId}")
-	public ResponseEntity deleteUserMemo(HttpServletRequest request, @PathVariable Integer memoId) {
+	public ResponseEntity<?> deleteUserMemo(HttpServletRequest request, @PathVariable Integer memoId) {
 		try {
 			Integer isDelete = memoService.deleteMemo(memoId);
 
@@ -138,6 +138,18 @@ public class MemoController {
 			return new ResponseEntity<>(Response.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.DB_DELETE_FAIL),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+	
+	/**
+	 * @HTTP Method : PUT
+	 * @URI : /apis/memo/{memoId}/checked?checked=
+	 * @Method 설명 : 메모 체크 상태 변
+	 * @변경이력 :
+	 */
+	@PutMapping("/{memoId}/checked")
+	public ResponseEntity<?> updateMemoCheckedState(@PathVariable Integer memoId, @RequestParam(value="checked") boolean checked ) {
+		memoService.updateMemoCheckedState(memoId, checked);
+		return new ResponseEntity<>(Response.res(StatusCode.OK, ResponseMessage.DB_UPDATE_SUCCESS), HttpStatus.OK);
 	}
 
 }

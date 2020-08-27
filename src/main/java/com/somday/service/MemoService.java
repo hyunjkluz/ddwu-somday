@@ -44,5 +44,9 @@ public class MemoService {
 	public Integer deleteMemo(Integer memoId) {
 		return memoMapper.deleteMemoById(memoId);
 	}
+	
+	public Integer updateMemoCheckedState(Integer memoId, boolean checked) {
+		return memoMapper.updateMemoChecked(memoId, checked);
+	}
 
 }

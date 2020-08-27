@@ -17,15 +17,17 @@ package com.somday.vo;
 public class MemoVO {
 	private Integer id;
 	private String content;
+	private boolean checked;
 
 	/**
 	 * @param id
 	 * @param content
 	 */
-	public MemoVO(Integer id, String content) {
+	public MemoVO(Integer id, String content, boolean checked) {
 		super();
 		this.id = id;
 		this.content = content;
+		this.checked = checked;
 	}
 
 	public MemoVO() {
@@ -39,13 +41,21 @@ public class MemoVO {
 		return content;
 	}
 
+	public boolean getChecked() {
+		return this.checked;
+	}
+
 	public void setContent(String content) {
 		this.content = content;
 	}
 
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+
 	@Override
 	public String toString() {
-		return "MemoVO [id=" + id + ", content=" + content + "]";
+		return "MemoVO [id=" + id + ", content=" + content + ", checked=" + this.checked + "]";
 	}
 
 }

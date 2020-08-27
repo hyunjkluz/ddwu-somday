@@ -4,7 +4,7 @@
 
 <mapper namespace="com.somday.repository.mapper.MemoMapper">
 	<select id="selectMemoByStudentId" resultType="MemoVO">
-		SELECT id, content
+		SELECT id, content, checked
 		FROM somday.Memo
 		WHERE studentId=#{studentId}
 		ORDER BY updatedAt DESC
@@ -25,4 +25,10 @@
 		DELETE FROM somday.Memo
 		WHERE id=#{id}
 	</delete>
+	
+	<update id="updateMemoChecked">
+		UPDATE somday.Memo
+		SET checked=#{checked}
+		WHERE id=#{id}
+	</update>
 </mapper>

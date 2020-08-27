@@ -40,8 +40,8 @@ public class S3Util {
 
 	private static final String ACCESS_KEY = PropertyUtil.getProperty("aws.credentials.access.key"); 
 	private static final String SECRET_KEY = PropertyUtil.getProperty("aws.credentials.secret.key");; 
-	private static final String S3_REGION = PropertyUtil.getProperty("aws.s3.bucket");;
-	private static final String S3_BUCKET = PropertyUtil.getProperty("aws.s3.bucket.region");;
+	private static final String S3_REGION = PropertyUtil.getProperty("aws.s3.bucket.region");;
+	private static final String S3_BUCKET = PropertyUtil.getProperty("aws.s3.bucket");;
 
 	private AmazonS3 conn;
 
@@ -50,7 +50,7 @@ public class S3Util {
 
 		conn = AmazonS3ClientBuilder.standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion(this.S3_REGION)
+                .withRegion(S3_REGION)
                 .build();
 	}
 

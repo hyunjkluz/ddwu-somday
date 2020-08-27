@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.PropertySource;
 
 /**
  * @Since : Aug 26, 2020
@@ -22,8 +23,11 @@ import org.slf4j.LoggerFactory;
  *         </pre>
  *
  */
+@PropertySource("classpath:config/application.properties")
 public class UploadFileUtils {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UploadFileUtils.class);
+	
+	private static final String BASE_URL = PropertyUtil.getProperty("aws.s3.bucket.region.url");
 
 	public static String uploadFile(String uploadPath, String originalName, byte[] byteData) throws Exception {
 		S3Util s3 = new S3Util();
@@ -46,7 +50,16 @@ public class UploadFileUtils {
 		LOGGER.info(uploadedFileName);
 		// s3.fileUpload(bucketName, new File(fileName))
 
-		return uploadedFileName;
+		return BASE_URL + uploadPath + uploadedFileName;
+	}
+	
+	public static void deleteFile(String s3Url) throws Exception {
+		String[] urls = s3Url.split(BASE_URL);
+		String fileName = urls[1];
+		
+		LOGGER.info("파일 이름 : "  + fileName);
+		S3Util s3 = new S3Util();
+		s3.fileDelete(fileName);
 	}
 
 	private static String calcPath(String uploadPath) {

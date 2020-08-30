@@ -15,27 +15,36 @@ package com.somday.vo;
  *
  */
 public class NoticeImgVO {
-	private String id;
+	private Integer id;
 	private String imageUrl;
 
-	public NoticeImgVO() {}
+	public NoticeImgVO() {
+	}
 
 	/**
 	 * @param id
 	 * @param imageUrl
 	 */
-	public NoticeImgVO(String id, String imageUrl) {
+	public NoticeImgVO(Integer id, String imageUrl) {
 		super();
 		this.id = id;
 		this.imageUrl = imageUrl;
 	}
 
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
 	public String getImageUrl() {
 		return imageUrl;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
 	}
 
 	@Override

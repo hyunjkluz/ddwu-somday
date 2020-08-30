@@ -5,6 +5,7 @@ package com.somday.vo;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Since : Aug 25, 2020
@@ -22,7 +23,7 @@ public class NoticeVO {
 	private NoticeCategoryVO category;
 	private MajorVO major;
 	private String title;
-	private NoticeVO[] images;
+	private List<NoticeImgVO> images;
 	private String content;
 	private Date registeredAt;
 	private Date updatedAt;
@@ -40,7 +41,7 @@ public class NoticeVO {
 	 * @param registeredAt
 	 * @param updatedAt
 	 */
-	public NoticeVO(Integer id, NoticeCategoryVO category, MajorVO major, String title, NoticeVO[] images,
+	public NoticeVO(Integer id, NoticeCategoryVO category, MajorVO major, String title, List<NoticeImgVO> images,
 			String content, Date registeredAt, Date updatedAt) {
 		super();
 		this.id = id;
@@ -69,7 +70,7 @@ public class NoticeVO {
 		return title;
 	}
 
-	public NoticeVO[] getImages() {
+	public List<NoticeImgVO> getImages() {
 		return images;
 	}
 
@@ -85,11 +86,37 @@ public class NoticeVO {
 		return updatedAt;
 	}
 
-	@Override
-	public String toString() {
-		return "NoticeVO [id=" + id + ", category=" + category + ", major=" + major + ", title=" + title + ", images="
-				+ Arrays.toString(images) + ", content=" + content + ", registeredAt=" + registeredAt + ", updatedAt="
-				+ updatedAt + "]";
+	public void setId(Integer id) {
+		this.id = id;
 	}
+
+	public void setCategory(NoticeCategoryVO category) {
+		this.category = category;
+	}
+
+	public void setMajor(MajorVO major) {
+		this.major = major;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setImages(List<NoticeImgVO> images) {
+		this.images = images;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public void setRegisteredAt(Date registeredAt) {
+		this.registeredAt = registeredAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
 
 }

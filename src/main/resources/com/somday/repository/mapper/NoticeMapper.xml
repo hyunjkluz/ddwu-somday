@@ -75,9 +75,11 @@
 		ORDER BY n.registeredAt DESC
 	</select>
 	
-	<select id="selectNoticeById" resultType="NoticeVO">
-		SELECT n.id "id", n.title "title", n.content "content", n.registeredAt "registeredAt", n.updatedAt "updatedAt", ni.image "image",
-		nc.id "category.id", nc.name "category.name", m.id "major.id", m.name "major.name"
+	<select id="selectNoticeById" resultMap="noticeDetail">
+		SELECT n.id "id", n.title "title", n.content "content", n.registeredAt "registeredAt", n.updatedAt "updatedAt", 
+		ni.id "image.id", ni.imageUrl "image.url",
+		nc.id "category.id", nc.name "category.name", 
+		m.id "major.id", m.name "major.name"
 		FROM somday.Notice AS n
 		JOIN somday.NoticeCategory AS nc
 		ON n.id=#{id} AND n.categoryId=nc.id
@@ -87,6 +89,29 @@
 		ON n.id=ni.noticeId
 		ORDER BY n.registeredAt DESC
 	</select>
+	
+	<resultMap type="NoticeVO" id="noticeDetail">
+		<id property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="registeredAt" column="registeredAt"/>
+		<result property="updatedAt" column="updatedAt"/>
+		
+		<association property="category" javaType="NoticeCategoryVO">
+			<id property="id" column="category.id"/>
+			<result property="name" column="category.name"/>
+		</association>
+		
+		<association property="major" javaType="MajorVO">
+			<id property="id" column="major.id"/>
+			<result property="name" column="major.name"/>
+		</association>
+		
+		<collection property="images" ofType="NoticeImgVO">
+			<id property="id" column="image.id"/>
+			<result property="imageUrl" column="image.url"/>
+		</collection>
+	</resultMap>
 	
 	<select id="selectMajorNoticeCategory" resultType="String">
 		SELECT id

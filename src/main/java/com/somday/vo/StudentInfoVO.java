@@ -19,6 +19,7 @@ import java.sql.Date;
 public class StudentInfoVO {
 	private String id;
 	private String name;
+	private String studentId;
 	private String password;
 	private String step;
 	private String type;
@@ -37,11 +38,12 @@ public class StudentInfoVO {
 	 * @param major
 	 * @param registeredAt
 	 */
-	public StudentInfoVO(String id, String name, String password, String step, String type, MajorVO major,
-			Date registeredAt) {
+	public StudentInfoVO(String id, String name, String studentId, String password, String step, String type,
+			MajorVO major, Date registeredAt) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.studentId = studentId;
 		this.password = password;
 		this.step = step;
 		this.type = type;
@@ -63,6 +65,14 @@ public class StudentInfoVO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
 	}
 
 	public String getPassword() {

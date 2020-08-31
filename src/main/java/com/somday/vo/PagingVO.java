@@ -15,7 +15,7 @@ package com.somday.vo;
  *
  */
 public class PagingVO {
-	private Integer pageSize = 2;
+	private Integer pageSize = 10;
 	private Integer page;
 	private Integer remainPage;
 

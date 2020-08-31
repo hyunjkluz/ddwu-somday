@@ -30,7 +30,7 @@ import com.somday.vo.PagingVO;
 @Service
 public class NoticeService {
 	public static final Logger LOGGER = LoggerFactory.getLogger(NoticeService.class);
-	public static final Integer PAGE_SIZE = 2;
+	public static final Integer PAGE_SIZE = 10;
 
 	@Autowired
 	private NoticeMapper noticeMapper;

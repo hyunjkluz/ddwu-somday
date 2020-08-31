@@ -33,4 +33,8 @@ public class StatusCode {
 	public static final int TOKEN_CREATE_ERROR=444;
 	
 	public static final int REFRESH_TOKEN=408;
+	
+	public static final int INVALID_RANGE=407;
+	
+	public static final int NULL_VALUE=410;
 }

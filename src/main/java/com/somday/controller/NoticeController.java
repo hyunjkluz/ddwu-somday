@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.somday.req.vo.TokenReq;
 import com.somday.service.NoticeService;
+import com.somday.utils.CommonUtil;
 import com.somday.utils.ResponseMessage;
 import com.somday.utils.StatusCode;
 import com.somday.vo.NoticePagingVO;
@@ -78,7 +79,7 @@ public class NoticeController {
 		boolean check = Arrays.stream(CATEGORY_ONLY).anyMatch(categoryId::equals);
 		
 		if (!check) {
-			return new ResponseEntity<>(Response.res(StatusCode.BAD_REQUEST, ResponseMessage.INCORRECT_VALUE), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(Response.res(StatusCode.INVALID_RANGE, ResponseMessage.INCORRECT_VALUE), HttpStatus.BAD_REQUEST);
 		}
 		
 		TokenReq tokenInfo = (TokenReq) request.getAttribute("tokenBody");
@@ -114,6 +115,10 @@ public class NoticeController {
 	@ApiOperation(value="검색 - 전체 공지사항")
 	@GetMapping("/search")
 	public ResponseEntity<?> searchNoticeBytitle(HttpServletRequest request, @RequestParam String searchWord) {
+		if(CommonUtil.isNotNull(searchWord)) {
+			return new ResponseEntity<>(Response.res(StatusCode.NULL_VALUE, ResponseMessage.NULL_VALUE), HttpStatus.BAD_REQUEST);
+		}
+		
 		TokenReq tokenInfo = (TokenReq) request.getAttribute("tokenBody");
 		
 		NoticeVO[] noticeList = noticeService.searchAllNoticeBytitle(tokenInfo.getMajorId(), searchWord);
@@ -129,6 +134,17 @@ public class NoticeController {
 	@ApiOperation(value="검색 - 카테고리별 공지사항", notes = "categoryId 값 = (major : 학과공지, CT02 : 취업, CT03 : 공모전)")
 	@GetMapping("/search/category/{categoryId}")
 	public ResponseEntity<?> searchNoticeByCategoryAndTitle(HttpServletRequest request, @PathVariable String categoryId, @RequestParam String searchWord) {
+		final String[] CATEGORY_ONLY = { "major", "CT02", "CT03", "CT04"};
+		boolean check = Arrays.stream(CATEGORY_ONLY).anyMatch(categoryId::equals);
+		
+		if (!check) {
+			return new ResponseEntity<>(Response.res(StatusCode.INVALID_RANGE, ResponseMessage.INCORRECT_VALUE), HttpStatus.BAD_REQUEST);
+		}
+		
+		if(CommonUtil.isNotNull(searchWord)) {
+			return new ResponseEntity<>(Response.res(StatusCode.NULL_VALUE, ResponseMessage.NULL_VALUE), HttpStatus.BAD_REQUEST);
+		}
+		
 		TokenReq tokenInfo = (TokenReq) request.getAttribute("tokenBody");
 		
 		NoticeVO[] noticeList = null;

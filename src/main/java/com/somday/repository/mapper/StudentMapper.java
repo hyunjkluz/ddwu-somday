@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.somday.req.vo.StudentInfoReq;
 import com.somday.req.vo.StudentInfoUpdateReq;
 import com.somday.vo.StudentInfoVO;
+import com.somday.vo.StudentSimpleVO;
 
 /**
  * @Since : Aug 24, 2020
@@ -33,5 +34,7 @@ public interface StudentMapper {
 	Integer updatePasswordById(@Param("id")String id, @Param("newPw")String encryptedPw);
 	
 	Integer updateStudentInfo(StudentInfoUpdateReq info);
+	
+	StudentSimpleVO selectStudentSimpleInfoById(@Param("id")String id);
 	
 }

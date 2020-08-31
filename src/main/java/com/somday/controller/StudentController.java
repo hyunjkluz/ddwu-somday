@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,7 @@ import com.somday.utils.StatusCode;
 import com.somday.vo.EncryptedVO;
 import com.somday.vo.Response;
 import com.somday.vo.StudentInfoVO;
+import com.somday.vo.StudentSimpleVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -107,6 +109,13 @@ public class StudentController {
 			return new ResponseEntity<>(Response.res(StatusCode.INTERNAL_SERVER_ERROR, ResponseMessage.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	/**
+	 * @HTTP Method : PUT
+	 * @URI : /apis/student/update
+	 * @Method 설명 : 개인정보 변
+	 * @변경이력 :
+	 */
 	@PutMapping("/update")
 	public ResponseEntity<?> updateStudent(HttpServletRequest request, @RequestBody @Valid StudentInfoUpdateReq newInfo) throws DBError, NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
 		TokenReq tokenInfo = (TokenReq) request.getAttribute("tokenBody");
@@ -121,6 +130,23 @@ public class StudentController {
 		studentService.putStudentInfo(newInfo);
 		return new ResponseEntity<>(Response.res(StatusCode.OK, ResponseMessage.DB_UPDATE_SUCCESS), HttpStatus.OK);
 			
+	}
+	
+	/**
+	 * @HTTP Method : GET
+	 * @URI : /apis/student/info
+	 * @Method 설명 :
+	 * @변경이력 :
+	 */
+	@GetMapping("/info")
+	public ResponseEntity<?> getStudentInfo(HttpServletRequest request) throws NoSuchAlgorithmException, UnsupportedEncodingException, GeneralSecurityException {
+		TokenReq tokenInfo = (TokenReq) request.getAttribute("tokenBody");
+		
+		StudentSimpleVO studentInfo = studentService.getStudentSimpleInfoById(tokenInfo.getId());
+		String encryptedStudnetId = studentInfo.getStudentId();
+		
+		studentInfo.setStudentId(securityService.decrypt(encryptedStudnetId));
+		return new ResponseEntity<>(Response.res(StatusCode.OK, ResponseMessage.DB_SELECT_SUCCESS, studentInfo), HttpStatus.OK);
 	}
 }
 

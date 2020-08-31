@@ -20,6 +20,7 @@ import com.somday.req.vo.StudentInfoUpdateReq;
 import com.somday.utils.CommonUtil;
 import com.somday.vo.EncryptedVO;
 import com.somday.vo.StudentInfoVO;
+import com.somday.vo.StudentSimpleVO;
 
 /**
  * @Since : Aug 24, 2020
@@ -70,6 +71,10 @@ public class StudentService {
 			throw new DBError("학생 개인정보 수정 DB 에러");
 		}
 		return result;
+	}
+	
+	public StudentSimpleVO getStudentSimpleInfoById(String id) {
+		return studentMapper.selectStudentSimpleInfoById(id);
 	}
 
 }

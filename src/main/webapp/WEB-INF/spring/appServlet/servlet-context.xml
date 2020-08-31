@@ -53,6 +53,7 @@
 			<mvc:mapping path="/apis/reservation/**"/>
 			<mvc:mapping path="/apis/notice/**"/>
 			<mvc:mapping path="/apis/student/update"/>
+			<mvc:mapping path="/apis/student/info"/>
 			<bean class="com.somday.controller.AuthInterceptor" />
 		</mvc:interceptor> 
 	</mvc:interceptors>

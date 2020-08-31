@@ -22,6 +22,13 @@
 		ON s.studentId=#{studentId} AND s.major = m.id
 	</select>
 	
+	<select id="selectStudentSimpleInfoById" parameterType="String" resultType="StudentSimpleVO">
+		SELECT s.name AS name, s.studentId AS studentId, s.step AS step, s.type AS type, m.id AS "major.id", m.name AS "major.name"
+		FROM somday.Student as s
+		JOIN somday.Major as m
+		ON s.id=#{id} AND s.major = m.id
+	</select>
+	
 	<insert id="insertStudent" parameterType="StudentInfoReq">
 		INSERT INTO Student (id, name, password, studentId, major, phone) 
 		VALUES (#{id}, #{name}, #{encryptedPw}, #{encryptedStudentId}, #{majorId}, #{encryptedPhone})

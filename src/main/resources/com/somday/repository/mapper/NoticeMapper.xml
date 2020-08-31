@@ -58,7 +58,7 @@
 		nc.id "category.id", nc.name "category.name", m.id "major.id", m.name "major.name"
 		FROM somday.Notice AS n
 		JOIN somday.NoticeCategory AS nc
-		ON n.categoryId=#{categoryId} AND n.categoryId=nc.id AND AND n.title LIKE "%#{searchWord, jdbcType=VARCHAR}%"
+		ON n.categoryId=#{categoryId} AND n.categoryId=nc.id AND n.title LIKE "%${searchWord}%"
 		LEFT JOIN somday.Major AS m
 		ON n.majorId=m.id
 		ORDER BY n.registeredAt DESC
@@ -69,7 +69,7 @@
 		nc.id "category.id", nc.name "category.name", m.id "major.id", m.name "major.name"
 		FROM somday.Notice AS n
 		JOIN somday.NoticeCategory AS nc
-		ON n.categoryId=nc.id AND (n.categoryId="CT02" OR n.categoryId="CT03" OR n.categoryId=#{majorNoticeCategory}) AND n.title LIKE "%#{searchWord, jdbcType=VARCHAR}%"
+		ON n.categoryId=nc.id AND (n.categoryId="CT02" OR n.categoryId="CT03" OR n.categoryId=#{majorNoticeCategory}) AND n.title LIKE "%${searchWord}%"
 		LEFT JOIN somday.Major AS m
 		ON n.majorId=m.id 
 		ORDER BY n.registeredAt DESC

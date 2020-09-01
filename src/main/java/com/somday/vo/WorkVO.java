@@ -3,6 +3,8 @@
  */
 package com.somday.vo;
 
+import java.util.Date;
+
 /**
  * @Since : Aug 25, 2020
  * @Author kimhyunjin
@@ -17,6 +19,7 @@ package com.somday.vo;
 public class WorkVO {
 	private Integer id;
 	private String studentId;
+	private Date registeredAt;
 	private RoomVO room;
 
 	public WorkVO() {
@@ -27,10 +30,11 @@ public class WorkVO {
 	 * @param studentId
 	 * @param room
 	 */
-	public WorkVO(Integer id, String studentId, RoomVO room) {
+	public WorkVO(Integer id, String studentId, Date registeredAt, RoomVO room) {
 		super();
 		this.id = id;
 		this.studentId = studentId;
+		this.registeredAt = registeredAt;
 		this.room = room;
 	}
 
@@ -46,9 +50,24 @@ public class WorkVO {
 		return room;
 	}
 
-	@Override
-	public String toString() {
-		return "WorkVO [id=" + id + ", studentId=" + studentId + ", room=" + room + "]";
+	public Date getRegisteredAt() {
+		return registeredAt;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
+	}
+
+	public void setRegisteredAt(Date registeredAt) {
+		this.registeredAt = registeredAt;
+	}
+
+	public void setRoom(RoomVO room) {
+		this.room = room;
 	}
 
 }

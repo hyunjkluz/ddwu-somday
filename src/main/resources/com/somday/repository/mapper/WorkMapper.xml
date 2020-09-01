@@ -4,7 +4,7 @@
 
 <mapper namespace="com.somday.repository.mapper.WorkMapper">
 	<select id="selectReservationByStudentId" resultType="WorkVO">
-		SELECT wr.id AS "id", wr.studentId AS "studentId", r.id AS "room.id", r.name AS "room.name"
+		SELECT wr.id AS "id", wr.studentId AS "studentId", wr.registeredAt AS "registeredAt", r.id AS "room.id", r.name AS "room.name"
 		FROM somday.WorkReservation AS wr
 		JOIN somday.Room AS r
 		ON wr.studentId=#{studentId} AND DATE(registeredAt)=current_date() AND wr.roomId=r.id

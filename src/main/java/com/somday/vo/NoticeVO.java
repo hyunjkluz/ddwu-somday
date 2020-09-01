@@ -25,8 +25,8 @@ public class NoticeVO {
 	private String title;
 	private List<NoticeImgVO> images;
 	private String content;
-	private Date registeredAt;
-	private Date updatedAt;
+	private String registeredAt;
+	private String updatedAt;
 
 	public NoticeVO() {
 	}
@@ -42,7 +42,7 @@ public class NoticeVO {
 	 * @param updatedAt
 	 */
 	public NoticeVO(Integer id, NoticeCategoryVO category, MajorVO major, String title, List<NoticeImgVO> images,
-			String content, Date registeredAt, Date updatedAt) {
+			String content, String registeredAt, String updatedAt) {
 		super();
 		this.id = id;
 		this.category = category;
@@ -78,11 +78,11 @@ public class NoticeVO {
 		return content;
 	}
 
-	public Date getRegisteredAt() {
+	public String getRegisteredAt() {
 		return registeredAt;
 	}
 
-	public Date getUpdatedAt() {
+	public String getUpdatedAt() {
 		return updatedAt;
 	}
 
@@ -110,11 +110,11 @@ public class NoticeVO {
 		this.content = content;
 	}
 
-	public void setRegisteredAt(Date registeredAt) {
+	public void setRegisteredAt(String registeredAt) {
 		this.registeredAt = registeredAt;
 	}
 
-	public void setUpdatedAt(Date updatedAt) {
+	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 

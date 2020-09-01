@@ -19,7 +19,7 @@ import java.util.Date;
 public class WorkVO {
 	private Integer id;
 	private String studentId;
-	private Date registeredAt;
+	private String registeredAt;
 	private RoomVO room;
 
 	public WorkVO() {
@@ -30,7 +30,7 @@ public class WorkVO {
 	 * @param studentId
 	 * @param room
 	 */
-	public WorkVO(Integer id, String studentId, Date registeredAt, RoomVO room) {
+	public WorkVO(Integer id, String studentId, String registeredAt, RoomVO room) {
 		super();
 		this.id = id;
 		this.studentId = studentId;
@@ -50,7 +50,7 @@ public class WorkVO {
 		return room;
 	}
 
-	public Date getRegisteredAt() {
+	public String getRegisteredAt() {
 		return registeredAt;
 	}
 
@@ -62,7 +62,7 @@ public class WorkVO {
 		this.studentId = studentId;
 	}
 
-	public void setRegisteredAt(Date registeredAt) {
+	public void setRegisteredAt(String registeredAt) {
 		this.registeredAt = registeredAt;
 	}
 

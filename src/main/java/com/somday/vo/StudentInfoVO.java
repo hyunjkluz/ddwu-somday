@@ -24,7 +24,7 @@ public class StudentInfoVO {
 	private String step;
 	private String type;
 	private MajorVO major;
-	private Date registeredAt;
+	private String registeredAt;
 
 	public StudentInfoVO() {
 	}
@@ -39,7 +39,7 @@ public class StudentInfoVO {
 	 * @param registeredAt
 	 */
 	public StudentInfoVO(String id, String name, String studentId, String password, String step, String type,
-			MajorVO major, Date registeredAt) {
+			MajorVO major, String registeredAt) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -107,11 +107,11 @@ public class StudentInfoVO {
 		this.major = major;
 	}
 
-	public Date getRegisteredAt() {
+	public String getRegisteredAt() {
 		return registeredAt;
 	}
 
-	public void setRegisteredAt(Date registeredAt) {
+	public void setRegisteredAt(String registeredAt) {
 		this.registeredAt = registeredAt;
 	}
 

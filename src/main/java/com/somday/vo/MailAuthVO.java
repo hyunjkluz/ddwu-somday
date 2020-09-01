@@ -23,7 +23,7 @@ public class MailAuthVO {
 	private Integer id;
 	private String studentId;
 	private Integer code;
-	private Date registeredAt;
+	private String registeredAt;
 
 	public MailAuthVO() {}
 
@@ -34,7 +34,7 @@ public class MailAuthVO {
 	 * @param registeredAt
 	 * @param expriedAt
 	 */
-	public MailAuthVO(Integer id, String studentId, Integer code, Date registeredAt) {
+	public MailAuthVO(Integer id, String studentId, Integer code, String registeredAt) {
 		super();
 		this.id = id;
 		this.studentId = studentId;
@@ -54,7 +54,7 @@ public class MailAuthVO {
 		return code;
 	}
 
-	public Date getRegisteredAt() {
+	public String getRegisteredAt() {
 		return registeredAt;
 	}
 
@@ -62,7 +62,11 @@ public class MailAuthVO {
 	public boolean isExpried() throws ParseException {
 		long reqTime = System.currentTimeMillis();
 
-		long timeDiff = reqTime - registeredAt.getTime();
+		SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		Date registeredAtDate = fm.parse(this.registeredAt);
+		
+		long timeDiff = reqTime - registeredAtDate.getTime();
 		
 		System.out.println("시간차(밀리초) : " + timeDiff);
 		
